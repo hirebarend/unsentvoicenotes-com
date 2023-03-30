@@ -52,7 +52,8 @@ function useVoiceNoteRecorder() {
         });
 
         setMediaRecorder(mediaRecorder);
-      });
+      })
+      .catch((error) => alert(error.message));
   }, []);
 
   return {
