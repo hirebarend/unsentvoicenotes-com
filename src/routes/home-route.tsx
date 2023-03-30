@@ -20,6 +20,8 @@ function useVoiceNoteRecorder() {
       .then((mediaDeviceInfos) => {
         const result = mediaDeviceInfos.filter((x) => x.kind === "audioinput");
 
+        alert(result[0].label);
+
         return navigator.mediaDevices.getUserMedia({
           audio: {
             deviceId: result[0].deviceId,
