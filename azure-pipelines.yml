@@ -1,0 +1,25 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: Npm@1
+  displayName: 'npm install'
+  inputs:
+    verbose: false
+- task: Npm@1
+  displayName: 'npm run build'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'run build'
+- task: Npm@1
+  displayName: 'npm run deploy'
+  env:
+    GOOGLE_APPLICATION_CREDENTIALS: './unsentvoicenotes-com-firebase-adminsdk-2o35e-905dcb59df.json'
+  inputs:
+    command: custom
+    verbose: false
+    customCommand: 'run deploy'
