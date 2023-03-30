@@ -5,6 +5,29 @@ import Badge from "react-bootstrap/Badge";
 import ListGroup from "react-bootstrap/ListGroup";
 import { useEffect, useState } from "react";
 
+async function getMediaRecorder(): Promise<MediaRecorder> {
+  await navigator.mediaDevices.getUserMedia({
+    audio: true,
+    video: false,
+  });
+
+  const mediaDeviceInfos = await navigator.mediaDevices.enumerateDevices();
+
+  alert(JSON.stringify(mediaDeviceInfos));
+
+  const mediaStream = await navigator.mediaDevices.getUserMedia({
+    audio: {
+      deviceId: mediaDeviceInfos[0].deviceId,
+    },
+  });
+
+  const mediaRecorder = new MediaRecorder(mediaStream, {
+    mimeType: "audio/webm",
+  });
+
+  return mediaRecorder;
+}
+
 function useVoiceNoteRecorder() {
   const [blob, setBlob] = useState(null as Blob | null);
 
@@ -14,54 +37,40 @@ function useVoiceNoteRecorder() {
     null as MediaRecorder | null
   );
 
-  useEffect(() => {
-    navigator.mediaDevices
-      .enumerateDevices()
-      .then((mediaDeviceInfos) => {
-        const result = mediaDeviceInfos.filter((x) => x.kind === "audioinput");
-
-        alert(result[0].label);
-
-        return navigator.mediaDevices.getUserMedia({
-          audio: {
-            deviceId: result[0].deviceId,
-          },
-        });
-      })
-      .then((stream) => {
-        const mediaRecorder = new MediaRecorder(stream, {
-          mimeType: "audio/mp3",
-        });
-
-        const blobs: Array<Blob> = [];
-
-        mediaRecorder.addEventListener("dataavailable", (blobEvent) => {
-          console.log(blobEvent.data);
-
-          if (blobEvent.data.size > 0) {
-            blobs.push(blobEvent.data);
-          }
-        });
-
-        mediaRecorder.addEventListener("start", () => {
-          setBlob(null);
-          setIsRecording(true);
-        });
-
-        mediaRecorder.addEventListener("stop", () => {
-          setBlob(new Blob(blobs));
-          setIsRecording(false);
-        });
-
-        setMediaRecorder(mediaRecorder);
-      })
-      .catch((error) => alert(error.message));
-  }, []);
-
   return {
     blob,
     isRecording,
     start: () => {
+      if (!mediaRecorder) {
+        getMediaRecorder().then((mediaRecorder) => {
+          const blobs: Array<Blob> = [];
+
+          mediaRecorder.addEventListener("dataavailable", (blobEvent) => {
+            console.log(blobEvent.data);
+
+            if (blobEvent.data.size > 0) {
+              blobs.push(blobEvent.data);
+            }
+          });
+
+          mediaRecorder.addEventListener("start", () => {
+            setBlob(null);
+            setIsRecording(true);
+          });
+
+          mediaRecorder.addEventListener("stop", () => {
+            setBlob(new Blob(blobs));
+            setIsRecording(false);
+          });
+
+          setMediaRecorder(mediaRecorder);
+
+          mediaRecorder.start();
+        });
+
+        return;
+      }
+
       mediaRecorder?.start();
     },
     stop: () => {
