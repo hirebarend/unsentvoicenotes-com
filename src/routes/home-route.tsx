@@ -28,7 +28,7 @@ function useVoiceNoteRecorder() {
       })
       .then((stream) => {
         const mediaRecorder = new MediaRecorder(stream, {
-          mimeType: "audio/webm",
+          mimeType: "audio/mp3",
         });
 
         const blobs: Array<Blob> = [];
