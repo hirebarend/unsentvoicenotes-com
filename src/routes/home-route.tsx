@@ -22,7 +22,7 @@ async function getMediaRecorder(): Promise<MediaRecorder> {
   });
 
   const mediaRecorder = new MediaRecorder(mediaStream, {
-    mimeType: "audio/webm;codecs=opus",
+    mimeType: "video/mp4",
   });
 
   return mediaRecorder;
@@ -84,16 +84,6 @@ function useVoiceNoteRecorder() {
 
 export function HomeRoute() {
   const voiceNoteRecorder = useVoiceNoteRecorder();
-
-  useEffect(() => {
-    const types = ["audio/webm", "audio/webm;codecs=opus"];
-
-    for (const type of types) {
-      if (MediaRecorder.isTypeSupported(type)) {
-        alert(type);
-      }
-    }
-  }, []);
 
   return (
     <>
