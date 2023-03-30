@@ -22,7 +22,7 @@ async function getMediaRecorder(): Promise<MediaRecorder> {
   });
 
   const mediaRecorder = new MediaRecorder(mediaStream, {
-    mimeType: "audio/mp3",
+    mimeType: "audio/webm;codecs=opus",
   });
 
   return mediaRecorder;
@@ -46,13 +46,14 @@ function useVoiceNoteRecorder() {
           .then((mediaRecorder) => {
             const blobs: Array<Blob> = [];
 
-            mediaRecorder.addEventListener("dataavailable", (blobEvent) => {
-              console.log(blobEvent.data);
-
-              if (blobEvent.data.size > 0) {
-                blobs.push(blobEvent.data);
+            mediaRecorder.addEventListener(
+              "dataavailable",
+              (blobEvent: BlobEvent) => {
+                if (blobEvent.data.size > 0) {
+                  blobs.push(blobEvent.data);
+                }
               }
-            });
+            );
 
             mediaRecorder.addEventListener("start", () => {
               setBlob(null);
@@ -83,6 +84,16 @@ function useVoiceNoteRecorder() {
 
 export function HomeRoute() {
   const voiceNoteRecorder = useVoiceNoteRecorder();
+
+  useEffect(() => {
+    const types = ["audio/webm", "audio/webm;codecs=opus"];
+
+    for (const type of types) {
+      if (MediaRecorder.isTypeSupported(type)) {
+        alert(type);
+      }
+    }
+  }, []);
 
   return (
     <>
