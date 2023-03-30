@@ -22,7 +22,7 @@ async function getMediaRecorder(): Promise<MediaRecorder> {
   });
 
   const mediaRecorder = new MediaRecorder(mediaStream, {
-    mimeType: "audio/webm",
+    mimeType: "audio/mp3",
   });
 
   return mediaRecorder;
@@ -42,31 +42,33 @@ function useVoiceNoteRecorder() {
     isRecording,
     start: () => {
       if (!mediaRecorder) {
-        getMediaRecorder().then((mediaRecorder) => {
-          const blobs: Array<Blob> = [];
+        getMediaRecorder()
+          .then((mediaRecorder) => {
+            const blobs: Array<Blob> = [];
 
-          mediaRecorder.addEventListener("dataavailable", (blobEvent) => {
-            console.log(blobEvent.data);
+            mediaRecorder.addEventListener("dataavailable", (blobEvent) => {
+              console.log(blobEvent.data);
 
-            if (blobEvent.data.size > 0) {
-              blobs.push(blobEvent.data);
-            }
-          });
+              if (blobEvent.data.size > 0) {
+                blobs.push(blobEvent.data);
+              }
+            });
 
-          mediaRecorder.addEventListener("start", () => {
-            setBlob(null);
-            setIsRecording(true);
-          });
+            mediaRecorder.addEventListener("start", () => {
+              setBlob(null);
+              setIsRecording(true);
+            });
 
-          mediaRecorder.addEventListener("stop", () => {
-            setBlob(new Blob(blobs));
-            setIsRecording(false);
-          });
+            mediaRecorder.addEventListener("stop", () => {
+              setBlob(new Blob(blobs));
+              setIsRecording(false);
+            });
 
-          setMediaRecorder(mediaRecorder);
+            setMediaRecorder(mediaRecorder);
 
-          mediaRecorder.start();
-        });
+            mediaRecorder.start();
+          })
+          .catch((error) => alert(error.message));
 
         return;
       }
