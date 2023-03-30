@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import moment from "moment";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -7,6 +8,13 @@ import {
   BsRecordCircleFill,
   BsStopCircleFill,
 } from "react-icons/bs";
+import { useQuery } from "@tanstack/react-query";
+import {
+  convertArrayBufferToBase64,
+  convertBlobToArrayBuffer,
+  createVoiceNote,
+  findAllVoiceNotes,
+} from "../core";
 
 async function getMediaRecorder(): Promise<MediaRecorder> {
   await navigator.mediaDevices.getUserMedia({
@@ -90,7 +98,26 @@ function useVoiceNoteRecorder() {
 }
 
 export function HomeRoute() {
+  const result = useQuery({
+    queryKey: ["voice-notes"],
+    queryFn: async () => {
+      console.log(await findAllVoiceNotes());
+
+      return await findAllVoiceNotes();
+    },
+  });
+
   const voiceNoteRecorder = useVoiceNoteRecorder();
+
+  useEffect(() => {
+    if (!voiceNoteRecorder.blob) {
+      return;
+    }
+
+    convertBlobToArrayBuffer(voiceNoteRecorder.blob)
+      .then((arrayBuffer: ArrayBuffer) => createVoiceNote(arrayBuffer))
+      .then(() => result.refetch());
+  }, [voiceNoteRecorder.blob]);
 
   return (
     <>
@@ -128,25 +155,38 @@ export function HomeRoute() {
               )}
             </Button>
           </div>
-          <ListGroup as="ol">
-            {[0, 1, 2].map((x) => (
-              <ListGroup.Item
-                as="li"
-                // className="align-items-start d-flex justify-content-between"
-                key={x}
-              >
-                <div className="align-items-center d-flex justify-content-between">
-                  <div>
-                    <div className="fw-bold">Today at 09:26</div>
-                    <div>46 seconds</div>
+          {result.data ? (
+            <ListGroup as="ol">
+              {result.data.map((x) => (
+                <ListGroup.Item as="li" key={x.timestamp}>
+                  <div className="align-items-center d-flex justify-content-between">
+                    <div>
+                      <div className="fw-bold">
+                        {moment(x.timestamp).format("dddd")} at{" "}
+                        {moment(x.timestamp).format("HH:mm")}
+                      </div>
+                      <div>46 seconds</div>
+                    </div>
+                    <div>
+                      <BsPlayCircleFill
+                        className="text-secondary"
+                        onClick={() => {
+                          const audio = new Audio(
+                            `data:video/mp4;base64,${convertArrayBufferToBase64(
+                              x.arrayBuffer
+                            )}`
+                          );
+
+                          audio.play();
+                        }}
+                        size={24}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <BsPlayCircleFill className="text-secondary" size={24} />
-                  </div>
-                </div>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
+                </ListGroup.Item>
+              ))}
+            </ListGroup>
+          ) : null}
         </Card.Body>
       </Card>
     </>

@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import "./index.scss";
 
@@ -10,5 +11,7 @@ import "./index.scss";
 // );
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
-  <App />
+  <QueryClientProvider client={new QueryClient()}>
+    <App />
+  </QueryClientProvider>
 );

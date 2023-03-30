@@ -10,7 +10,11 @@
     "deploy": "firebase deploy"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.28.0",
     "bootstrap": "^5.2.3",
+    "firebase": "^9.18.0",
+    "idb": "^7.1.1",
+    "moment": "^2.29.4",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0",
