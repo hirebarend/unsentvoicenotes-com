@@ -21,7 +21,7 @@ async function getDb(): Promise<IDBPDatabase> {
     return _db;
   }
 
-  _db = await openDB("unsent-voice-notes", 4, {
+  _db = await openDB("unsent-voice-notes", 5, {
     upgrade: (x, oldVersion, newVersion) => {
       for (const objectStoreName of x.objectStoreNames) {
         x.deleteObjectStore(objectStoreName);
