@@ -1,23 +1,36 @@
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
+import { useNavigate } from "react-router-dom";
+import { useAuthentication } from "../custom-hooks";
 
 export function UnauthenticatedRoute() {
+  const authentication = useAuthentication();
+
+  const navigate = useNavigate();
+
   return (
     <>
       <Card className="my-4">
         <Card.Body>
-          <Card.Title className="text-center">
-            Welcome to Unsent Voice Notes
-          </Card.Title>
           <Card.Text className="text-center">
-            Journaling app. From once-in-a-lifetime events to everyday moments,
-            our elegant interface makes journaling your life a simple pleasure.
+            Start your journey of self-reflection and personal growth with our
+            intuitive and easy-to-use journaling app.
           </Card.Text>
-          <img className="w-100" src="/undraw_recording_re_5xyq.svg" />
+          <div className="p-5">
+            <img className="w-100" src="/undraw_recording_re_5xyq.svg" />
+          </div>
         </Card.Body>
       </Card>
 
-      <Button className="fw-semibold w-100" variant="primary">
+      <Button
+        className="fw-semibold w-100"
+        onClick={() => {
+          authentication.signIn();
+
+          navigate("/");
+        }}
+        variant="primary"
+      >
         Get Started
       </Button>
     </>

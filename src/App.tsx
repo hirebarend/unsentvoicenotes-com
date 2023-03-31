@@ -1,4 +1,5 @@
-// import { useState } from "react";
+import { useEffect } from "react";
+import mixpanel from "mixpanel-browser";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
@@ -19,6 +20,16 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+  useEffect(() => {
+    if (process.env.NODE_ENV === "development") {
+      return;
+    }
+
+    mixpanel.init("6570fb6b55412e8145762b070dd25c3b");
+
+    mixpanel.track("Page View");
+  }, []);
+
   return (
     <>
       <Navbar bg="light" expand="lg">
