@@ -123,9 +123,11 @@ export function HomeRoute() {
                         className="text-secondary"
                         onClick={() => {
                           findFile(x.fileId).then(async (file) => {
-                            const audioContext = new AudioContext();
+                            const audioContext: AudioContext =
+                              new AudioContext();
 
-                            const gainNode = audioContext.createGain();
+                            const gainNode: GainNode =
+                              audioContext.createGain();
                             gainNode.gain.value = 1;
 
                             const audioBuffer =
@@ -133,10 +135,23 @@ export function HomeRoute() {
                                 cloneArrayBuffer(file.arrayBuffer)
                               );
 
-                            var source = audioContext.createBufferSource();
-                            source.buffer = audioBuffer;
-                            source.connect(audioContext.destination);
-                            source.start();
+                            const audioBufferSourceNode: AudioBufferSourceNode =
+                              audioContext.createBufferSource();
+
+                            audioBufferSourceNode.addEventListener(
+                              "ended",
+                              () => {
+                                audioBufferSourceNode.disconnect();
+                              }
+                            );
+
+                            audioBufferSourceNode.buffer = audioBuffer;
+
+                            audioBufferSourceNode.connect(
+                              audioContext.destination
+                            );
+
+                            audioBufferSourceNode.start();
                           });
                         }}
                         size={24}
