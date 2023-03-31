@@ -13,6 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
   VoiceNoteRecorder,
+  cloneArrayBuffer,
   convertArrayBufferToBase64,
   convertBlobToArrayBuffer,
   createVoiceNote,
@@ -121,16 +122,22 @@ export function HomeRoute() {
                       <BsPlayCircleFill
                         className="text-secondary"
                         onClick={() => {
-                          findFile(x.fileId)
-                            .then(
-                              (file) =>
-                                new Audio(
-                                  `data:video/mp4;base64,${convertArrayBufferToBase64(
-                                    file.arrayBuffer
-                                  )}`
-                                )
-                            )
-                            .then((audio) => audio.play());
+                          findFile(x.fileId).then(async (file) => {
+                            const audioContext = new AudioContext();
+
+                            const gainNode = audioContext.createGain();
+                            gainNode.gain.value = 1;
+
+                            const audioBuffer =
+                              await audioContext.decodeAudioData(
+                                cloneArrayBuffer(file.arrayBuffer)
+                              );
+
+                            var source = audioContext.createBufferSource();
+                            source.buffer = audioBuffer;
+                            source.connect(audioContext.destination);
+                            source.start();
+                          });
                         }}
                         size={24}
                       />
