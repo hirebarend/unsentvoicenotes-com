@@ -105,10 +105,7 @@ export function HomeRoute() {
               )}
             </Button>
           </div>
-          <div className="p-5">
-            <img className="w-100" src="/undraw_notes_re_pxhw.svg" />
-          </div>
-          {result.data ? (
+          {result.data && result.data.length ? (
             <ListGroup as="ol">
               {result.data.map((x) => (
                 <ListGroup.Item as="li" key={x.timestamp}>
@@ -142,7 +139,11 @@ export function HomeRoute() {
                 </ListGroup.Item>
               ))}
             </ListGroup>
-          ) : null}
+          ) : (
+            <div className="p-5">
+              <img className="w-100" src="/undraw_notes_re_pxhw.svg" />
+            </div>
+          )}
         </Card.Body>
       </Card>
     </>
