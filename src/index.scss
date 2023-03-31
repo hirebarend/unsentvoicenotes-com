@@ -5,4 +5,13 @@ $secondary: #333533;
 
 audio {
   width: 100%;
+
+  // &::-webkit-media-controls-panel {
+  //   background-color: #333533;
+  // }
+
+  &::-webkit-media-controls-play-button {
+    background-color: #ffe306;
+    border-radius: 50%;
+  }
 }
