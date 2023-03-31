@@ -1,5 +1,18 @@
+import { initializeApp } from "firebase/app";
+import { ref, getDownloadURL, getStorage, uploadBytes } from "firebase/storage";
 import { openDB, IDBPDatabase } from "idb";
 import * as uuid from "uuid";
+
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyBA4tBw7CxYL-_ABZZtlytgSCGKrCbH9IE",
+  authDomain: "unsentvoicenotes-com.firebaseapp.com",
+  projectId: "unsentvoicenotes-com",
+  storageBucket: "unsentvoicenotes-com.appspot.com",
+  messagingSenderId: "347359764919",
+  appId: "1:347359764919:web:4d6f5e57747891a00b0832",
+});
+
+const firebaseStorage = getStorage(firebaseApp);
 
 let _db: IDBPDatabase | null = null;
 
@@ -17,22 +30,10 @@ async function getDb(): Promise<IDBPDatabase> {
       x.createObjectStore("voice-notes", {
         autoIncrement: true,
       });
-
-      x.createObjectStore("files", {
-        keyPath: "id",
-      });
     },
   });
 
   return _db;
-}
-
-export async function findAllFiles(): Promise<
-  Array<{ arrayBuffer: ArrayBuffer; id: string }>
-> {
-  const db = await getDb();
-
-  return await db.getAll("files");
 }
 
 export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
@@ -40,19 +41,19 @@ export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
 
   const fileId: string = uuid.v4();
 
+  const storageReference = ref(firebaseStorage, fileId);
+
+  await uploadBytes(storageReference, arrayBuffer);
+
   await db.add("voice-notes", {
     fileId,
     timestamp: new Date().getTime(),
-  });
-
-  await db.add("files", {
-    arrayBuffer,
-    id: fileId,
+    url: await getDownloadURL(storageReference),
   });
 }
 
 export async function findAllVoiceNotes(): Promise<
-  Array<{ fileId: string; timestamp: number }>
+  Array<{ fileId: string; timestamp: number; url: string }>
 > {
   const db = await getDb();
 

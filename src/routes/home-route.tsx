@@ -17,7 +17,6 @@ import {
   convertArrayBufferToBase64,
   convertBlobToArrayBuffer,
   createVoiceNote,
-  findAllFiles,
   findAllVoiceNotes,
 } from "../core";
 import { useAuthentication } from "../custom-hooks";
@@ -29,17 +28,10 @@ export function HomeRoute() {
 
   const [isLoading, setIsLoading] = useState({} as { [key: string]: boolean });
 
-  const resultVoiceNotes = useQuery({
+  const result = useQuery({
     queryKey: ["voice-notes"],
     queryFn: async () => {
       return await findAllVoiceNotes();
-    },
-  });
-
-  const resultFiles = useQuery({
-    queryKey: ["files"],
-    queryFn: async () => {
-      return await findAllFiles();
     },
   });
 
@@ -59,9 +51,7 @@ export function HomeRoute() {
     convertBlobToArrayBuffer(blob)
       .then((arrayBuffer: ArrayBuffer) => createVoiceNote(arrayBuffer))
       .then(() => {
-        resultVoiceNotes.refetch();
-
-        resultFiles.refetch();
+        result.refetch();
       });
   }, [blob]);
 
@@ -119,9 +109,9 @@ export function HomeRoute() {
               )}
             </Button>
           </div>
-          {resultVoiceNotes.data && resultVoiceNotes.data.length ? (
+          {result.data && result.data.length ? (
             <ListGroup as="ol">
-              {resultVoiceNotes.data.map((x) => (
+              {result.data.map((x) => (
                 <ListGroup.Item as="li" key={x.timestamp}>
                   <div>
                     <div>
@@ -129,13 +119,7 @@ export function HomeRoute() {
                       {moment(x.timestamp).format("HH:mm")}
                     </div>
                     <div className="py-2">
-                      <audio
-                        controls
-                        src={`data:video/mp4;base64,${convertArrayBufferToBase64(
-                          resultFiles.data?.find((y) => y.id === x.fileId)
-                            ?.arrayBuffer || new ArrayBuffer(0)
-                        )}`}
-                      />
+                      <audio controls src={x.url} />
                     </div>
                   </div>
                 </ListGroup.Item>
