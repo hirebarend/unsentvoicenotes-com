@@ -43,7 +43,9 @@ export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
 
   const storageReference = ref(firebaseStorage, fileId);
 
-  await uploadBytes(storageReference, arrayBuffer);
+  await uploadBytes(storageReference, arrayBuffer, {
+    contentType: "video/mp4",
+  });
 
   await db.add("voice-notes", {
     fileId,
