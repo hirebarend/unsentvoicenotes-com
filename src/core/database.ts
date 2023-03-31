@@ -38,20 +38,9 @@ export async function findAllFiles(): Promise<
 export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
   const db = await getDb();
 
-  const audioContext = new AudioContext();
-
-  const audioBuffer = await audioContext.decodeAudioData(
-    cloneArrayBuffer(arrayBuffer)
-  );
-
-  const duration = audioBuffer.duration;
-
-  await audioContext.close();
-
   const fileId: string = uuid.v4();
 
   await db.add("voice-notes", {
-    duration,
     fileId,
     timestamp: new Date().getTime(),
   });
@@ -63,7 +52,7 @@ export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
 }
 
 export async function findAllVoiceNotes(): Promise<
-  Array<{ duration: number; fileId: string; timestamp: number }>
+  Array<{ fileId: string; timestamp: number }>
 > {
   const db = await getDb();
 
