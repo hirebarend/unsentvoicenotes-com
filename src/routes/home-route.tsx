@@ -17,8 +17,8 @@ import {
   convertArrayBufferToBase64,
   convertBlobToArrayBuffer,
   createVoiceNote,
+  findAllFiles,
   findAllVoiceNotes,
-  findFile,
 } from "../core";
 import { useAuthentication } from "../custom-hooks";
 
@@ -27,10 +27,19 @@ export function HomeRoute() {
 
   const navigate = useNavigate();
 
-  const result = useQuery({
+  const [isLoading, setIsLoading] = useState({} as { [key: string]: boolean });
+
+  const resultVoiceNotes = useQuery({
     queryKey: ["voice-notes"],
     queryFn: async () => {
       return await findAllVoiceNotes();
+    },
+  });
+
+  const resultFiles = useQuery({
+    queryKey: ["files"],
+    queryFn: async () => {
+      return await findAllFiles();
     },
   });
 
@@ -49,7 +58,11 @@ export function HomeRoute() {
 
     convertBlobToArrayBuffer(blob)
       .then((arrayBuffer: ArrayBuffer) => createVoiceNote(arrayBuffer))
-      .then(() => result.refetch());
+      .then(() => {
+        resultVoiceNotes.refetch();
+
+        resultFiles.refetch();
+      });
   }, [blob]);
 
   if (!authentication.isAuthenticated) {
@@ -106,56 +119,25 @@ export function HomeRoute() {
               )}
             </Button>
           </div>
-          {result.data && result.data.length ? (
+          {resultVoiceNotes.data && resultVoiceNotes.data.length ? (
             <ListGroup as="ol">
-              {result.data.map((x) => (
+              {resultVoiceNotes.data.map((x) => (
                 <ListGroup.Item as="li" key={x.timestamp}>
                   <div className="align-items-center d-flex justify-content-between">
                     <div>
-                      <div className="fw-bold">
+                      <div>
                         {moment(x.timestamp).format("dddd")} at{" "}
                         {moment(x.timestamp).format("HH:mm")}
                       </div>
-                      <div>{Math.round(x.duration)} seconds</div>
-                    </div>
-                    <div>
-                      <BsPlayCircleFill
-                        className="text-secondary"
-                        onClick={() => {
-                          findFile(x.fileId).then(async (file) => {
-                            const audioContext: AudioContext =
-                              new AudioContext();
-
-                            const gainNode: GainNode =
-                              audioContext.createGain();
-                            gainNode.gain.value = 1;
-
-                            const audioBuffer =
-                              await audioContext.decodeAudioData(
-                                cloneArrayBuffer(file.arrayBuffer)
-                              );
-
-                            const audioBufferSourceNode: AudioBufferSourceNode =
-                              audioContext.createBufferSource();
-
-                            audioBufferSourceNode.addEventListener(
-                              "ended",
-                              () => {
-                                audioBufferSourceNode.disconnect();
-                              }
-                            );
-
-                            audioBufferSourceNode.buffer = audioBuffer;
-
-                            audioBufferSourceNode.connect(
-                              audioContext.destination
-                            );
-
-                            audioBufferSourceNode.start();
-                          });
-                        }}
-                        size={24}
-                      />
+                      <div className="py-2">
+                        <audio
+                          controls
+                          src={`data:video/mp4;base64,${convertArrayBufferToBase64(
+                            resultFiles.data?.find((y) => y.id === x.fileId)
+                              ?.arrayBuffer || new ArrayBuffer(0)
+                          )}`}
+                        />
+                      </div>
                     </div>
                   </div>
                 </ListGroup.Item>

@@ -27,12 +27,12 @@ async function getDb(): Promise<IDBPDatabase> {
   return _db;
 }
 
-export async function findFile(
-  id: string
-): Promise<{ arrayBuffer: ArrayBuffer; id: string }> {
+export async function findAllFiles(): Promise<
+  Array<{ arrayBuffer: ArrayBuffer; id: string }>
+> {
   const db = await getDb();
 
-  return await db.get("files", id);
+  return await db.getAll("files");
 }
 
 export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
