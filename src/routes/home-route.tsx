@@ -123,21 +123,19 @@ export function HomeRoute() {
             <ListGroup as="ol">
               {resultVoiceNotes.data.map((x) => (
                 <ListGroup.Item as="li" key={x.timestamp}>
-                  <div className="align-items-center d-flex justify-content-between">
+                  <div>
                     <div>
-                      <div>
-                        {moment(x.timestamp).format("dddd")} at{" "}
-                        {moment(x.timestamp).format("HH:mm")}
-                      </div>
-                      <div className="py-2">
-                        <audio
-                          controls
-                          src={`data:video/mp4;base64,${convertArrayBufferToBase64(
-                            resultFiles.data?.find((y) => y.id === x.fileId)
-                              ?.arrayBuffer || new ArrayBuffer(0)
-                          )}`}
-                        />
-                      </div>
+                      {moment(x.timestamp).format("dddd")} at{" "}
+                      {moment(x.timestamp).format("HH:mm")}
+                    </div>
+                    <div className="py-2">
+                      <audio
+                        controls
+                        src={`data:video/mp4;base64,${convertArrayBufferToBase64(
+                          resultFiles.data?.find((y) => y.id === x.fileId)
+                            ?.arrayBuffer || new ArrayBuffer(0)
+                        )}`}
+                      />
                     </div>
                   </div>
                 </ListGroup.Item>
