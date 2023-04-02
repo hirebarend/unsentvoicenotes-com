@@ -1,2 +1,2 @@
+export * from "./audio-recorder";
 export * from "./database";
-export * from "./voice-note-recorder";

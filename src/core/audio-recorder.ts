@@ -1,4 +1,4 @@
-export class VoiceNoteRecorder {
+export class AudioRecorder {
   protected blobs: Array<Blob> = [];
 
   protected mediaRecorder: MediaRecorder | null = null;
