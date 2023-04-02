@@ -1,7 +1,16 @@
 import { initializeApp } from "firebase/app";
+import { addDoc, collection, getFirestore } from "firebase/firestore";
 import { ref, getDownloadURL, getStorage, uploadBytes } from "firebase/storage";
 import { openDB, IDBPDatabase } from "idb";
 import * as uuid from "uuid";
+
+const deviceId: string = localStorage.getItem("device-id")
+  ? localStorage.getItem("device-id") || ""
+  : (() => {
+      localStorage.setItem("device-id", uuid.v4());
+
+      return localStorage.getItem("device-id") || "";
+    })();
 
 const firebaseApp = initializeApp({
   apiKey: "AIzaSyBA4tBw7CxYL-_ABZZtlytgSCGKrCbH9IE",
@@ -13,6 +22,8 @@ const firebaseApp = initializeApp({
 });
 
 const firebaseStorage = getStorage(firebaseApp);
+
+const firestore = getFirestore(firebaseApp);
 
 let _db: IDBPDatabase | null = null;
 
@@ -48,6 +59,13 @@ export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
   });
 
   await db.add("voice-notes", {
+    fileId,
+    timestamp: new Date().getTime(),
+    url: await getDownloadURL(storageReference),
+  });
+
+  await addDoc(collection(firestore, "voice-notes"), {
+    deviceId,
     fileId,
     timestamp: new Date().getTime(),
     url: await getDownloadURL(storageReference),
