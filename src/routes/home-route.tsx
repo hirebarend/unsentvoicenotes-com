@@ -33,9 +33,8 @@ export function HomeRoute() {
 
     convertBlobToArrayBuffer(blob)
       .then((arrayBuffer: ArrayBuffer) => createVoiceNote(arrayBuffer))
-      .then(() => {
-        result.refetch();
-      });
+      .then(() => result.refetch())
+      .then(() => setBlob(null));
   }, [blob]);
 
   if (!authentication.isAuthenticated) {
