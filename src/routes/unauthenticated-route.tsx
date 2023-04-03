@@ -23,7 +23,7 @@ export function UnauthenticatedRoute() {
       </Card>
 
       <Button
-        className="fw-semibold w-100"
+        className="fw-semibold text-white w-100"
         onClick={() => {
           authentication.signIn();
 

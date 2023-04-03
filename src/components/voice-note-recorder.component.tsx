@@ -1,4 +1,5 @@
 import { useState } from "react";
+import classNames from "classnames";
 import Button from "react-bootstrap/Button";
 import { BsRecordCircleFill, BsStopCircleFill } from "react-icons/bs";
 import { AudioRecorder } from "../core";
@@ -12,7 +13,10 @@ export function VoiceNoteRecorderButton(props: { fn: (blob: Blob) => void }) {
 
   return (
     <Button
-      className="fw-semibold w-100"
+      className={classNames("fw-semibold w-100", {
+        "text-black": isRecording,
+        "text-white": !isRecording,
+      })}
       onClick={() => {
         if (isRecording) {
           audioRecorder.stop();

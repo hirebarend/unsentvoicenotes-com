@@ -1,5 +1,8 @@
-$primary: #ffe306;
-$secondary: #333533;
+// $primary: #ffe306;
+// $secondary: #333533;
+
+$primary: #a240ff;
+$secondary: #faff00;
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
@@ -11,7 +14,7 @@ audio {
   // }
 
   &::-webkit-media-controls-play-button {
-    background-color: #ffe306;
+    background-color: #a240ff;
     border-radius: 50%;
   }
 }
