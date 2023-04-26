@@ -26,6 +26,19 @@ export function VoiceNoteRecorderButton(props: { fn: (blob: Blob) => void }) {
           audioRecorder.start();
 
           setIsRecording(true);
+
+          setTimeout(() => {
+            const audioContext = new AudioContext();
+            const oscillatorNode = audioContext.createOscillator();
+            oscillatorNode.type = "sine";
+            oscillatorNode.frequency.value = 800;
+            oscillatorNode.connect(audioContext.destination);
+            oscillatorNode.start();
+
+            setTimeout(() => {
+              oscillatorNode.stop();
+            }, 300);
+          }, 1000);
         }
       }}
       variant={isRecording ? "secondary" : "primary"}

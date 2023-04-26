@@ -59,15 +59,15 @@ export function HomeRoute() {
           </div>
           {result.data && result.data.length ? (
             <ListGroup as="ol" variant="flush">
-              {result.data.map((x) => (
+              {result.data.map((x: any) => (
                 <ListGroup.Item as="li" key={x.timestamp}>
                   <div>
-                    <div className="fs-6 fw-semibold text-center">
-                      {moment(x.timestamp).format("dddd")} at{" "}
-                      {moment(x.timestamp).format("HH:mm")}
-                    </div>
-                    <div className="py-1">
-                      <audio controls src={x.url} />
+                    <div className="fs-6 text-center">
+                      <p className="fw-semibold">
+                        {moment(x.timestamp).format("dddd")} at{" "}
+                        {moment(x.timestamp).format("HH:mm")}
+                      </p>
+                      {x.text ? <p>{x.text}</p> : null}
                     </div>
                   </div>
                 </ListGroup.Item>
