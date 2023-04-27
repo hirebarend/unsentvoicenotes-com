@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Button from "react-bootstrap/Button";
-import { BsRecordCircleFill, BsStopCircleFill } from "react-icons/bs";
+import { BsRecordCircle, BsStopCircle } from "react-icons/bs";
 import { AudioRecorder } from "../core";
 
 export function VoiceNoteRecorderButton(props: { fn: (blob: Blob) => void }) {
@@ -10,7 +10,7 @@ export function VoiceNoteRecorderButton(props: { fn: (blob: Blob) => void }) {
 
   return (
     <Button
-      className="fw-semibold w-100"
+      className="w-100"
       onClick={() => {
         if (isRecording) {
           audioRecorder.stop();
@@ -39,12 +39,12 @@ export function VoiceNoteRecorderButton(props: { fn: (blob: Blob) => void }) {
     >
       {isRecording ? (
         <>
-          <BsStopCircleFill style={{ marginBottom: "3px" }} />
+          <BsStopCircle style={{ marginBottom: "3px" }} />
           &nbsp; Stop Recording
         </>
       ) : (
         <>
-          <BsRecordCircleFill style={{ marginBottom: "3px" }} />
+          <BsRecordCircle style={{ marginBottom: "3px" }} />
           &nbsp; Start Recording
         </>
       )}

@@ -55,7 +55,7 @@ export function HomeRoute() {
       <Card className="my-4">
         <Card.Body>
           <Card.Title className="text-center">
-            An Archive of My Thoughts
+            Archive of my Thoughts
           </Card.Title>
           <div className="py-3">
             <VoiceNoteRecorderButton fn={(blob: Blob) => setBlob(blob)} />
@@ -63,16 +63,25 @@ export function HomeRoute() {
           {result.data && result.data.length ? (
             <ListGroup as="ol" variant="flush">
               {result.data.map((x: any) => (
-                <ListGroup.Item as="li" key={x.timestamp}>
+                <ListGroup.Item as="li" className="px-0" key={x.timestamp}>
                   <div>
-                    <div className="fs-6 text-end">
+                    <div className="fs-6">
                       <p
-                        className="text-muted"
+                        className="text-end text-muted"
                         style={{ fontSize: "0.875rem" }}
                       >
-                        {moment(x.timestamp).format("DD MMMM yyyy HH:mm")}
+                        {moment(x.timestamp).format("DD MMMM yyyy, HH:mm")}
                       </p>
-                      {x.text ? (
+                      {["unprocessed", "processing"].includes(x.status) ? (
+                        <p style={{ textAlign: "justify" }}>
+                          We are processing your entry, please hold on a moment.
+                          This may take a few seconds depending on the length of
+                          your recording. Thank you for using our app to capture
+                          your thoughts!
+                        </p>
+                      ) : null}
+                      {["processed", "optimized"].includes(x.status) &&
+                      x.text ? (
                         <p style={{ textAlign: "justify" }}>{x.text}</p>
                       ) : null}
                     </div>

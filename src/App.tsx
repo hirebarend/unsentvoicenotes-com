@@ -34,9 +34,7 @@ function App() {
     <>
       <Navbar expand="lg">
         <Container>
-          <Navbar.Brand className="fw-semibold" href="/">
-            Unsent Voice Notes
-          </Navbar.Brand>
+          <Navbar.Brand href="/">Unsent Voice Notes</Navbar.Brand>
         </Container>
       </Navbar>
       <Container>
