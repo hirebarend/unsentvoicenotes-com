@@ -36,12 +36,6 @@ export async function createVoiceNote(
       text: null,
       timestamp: new Date().getTime(),
       url,
-
-      // id: uuid.v4(),
-      // status: "processed",
-      // text: "Todays was a good day, had a good breakfast. A bit stressed about my assigments but still very positive.",
-      // timestamp: new Date().getTime(),
-      // url,
     },
     {
       params: {
@@ -54,7 +48,7 @@ export async function createVoiceNote(
 export async function findAllVoiceNotes(sub: string): Promise<
   Array<{
     id: string;
-    status: "unprocessed" | "processing" | "processed" | "optimized";
+    status: "unprocessed" | "processing" | "processed" | "summarized";
     text: string | null;
     timestamp: number;
     url: string;
@@ -63,7 +57,7 @@ export async function findAllVoiceNotes(sub: string): Promise<
   const response = await axios.get<
     Array<{
       id: string;
-      status: "unprocessed" | "processing" | "processed" | "optimized";
+      status: "unprocessed" | "processing" | "processed" | "summarized";
       text: string | null;
       timestamp: number;
       url: string;

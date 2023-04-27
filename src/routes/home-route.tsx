@@ -75,12 +75,12 @@ export function HomeRoute() {
                       {["unprocessed", "processing"].includes(x.status) ? (
                         <p style={{ textAlign: "justify" }}>
                           We are processing your entry, please hold on a moment.
-                          This may take a few seconds depending on the length of
+                          This may take a few minutes depending on the length of
                           your recording. Thank you for using our app to capture
                           your thoughts!
                         </p>
                       ) : null}
-                      {["processed", "optimized"].includes(x.status) &&
+                      {["processed", "summarized"].includes(x.status) &&
                       x.text ? (
                         <p style={{ textAlign: "justify" }}>{x.text}</p>
                       ) : null}
