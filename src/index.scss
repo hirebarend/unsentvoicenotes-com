@@ -1,8 +1,10 @@
-// $primary: #ffe306;
-// $secondary: #333533;
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600;1,700;1,800&display=swap");
 
 $primary: #010001;
 $secondary: #faff00;
+
+$font-family-sans-serif: "Literata";
+$font-family-monospace: "Literata";
 
 @import "../node_modules/bootstrap/scss/bootstrap.scss";
 
@@ -12,9 +14,4 @@ audio {
   // &::-webkit-media-controls-panel {
   //   background-color: #333533;
   // }
-
-  &::-webkit-media-controls-play-button {
-    background-color: #a240ff;
-    border-radius: 50%;
-  }
 }

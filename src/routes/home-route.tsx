@@ -55,7 +55,7 @@ export function HomeRoute() {
       <Card className="my-4">
         <Card.Body>
           <Card.Title className="text-center">
-            A Transcribed Archive of Your Thoughts
+            An Archive of My Thoughts
           </Card.Title>
           <div className="py-3">
             <VoiceNoteRecorderButton fn={(blob: Blob) => setBlob(blob)} />
@@ -65,10 +65,12 @@ export function HomeRoute() {
               {result.data.map((x: any) => (
                 <ListGroup.Item as="li" key={x.timestamp}>
                   <div>
-                    <div className="fs-6 text-center">
-                      <p className="fw-semibold">
-                        {moment(x.timestamp).format("dddd")} at{" "}
-                        {moment(x.timestamp).format("HH:mm")}
+                    <div className="fs-6 text-end">
+                      <p
+                        className="text-muted"
+                        style={{ fontSize: "0.875rem" }}
+                      >
+                        {moment(x.timestamp).format("DD MMMM yyyy HH:mm")}
                       </p>
                       {x.text ? (
                         <p style={{ textAlign: "justify" }}>{x.text}</p>
