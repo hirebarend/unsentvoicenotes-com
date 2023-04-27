@@ -32,7 +32,7 @@ function App() {
 
   return (
     <>
-      <Navbar bg="primary" expand="lg" variant="dark">
+      <Navbar expand="lg">
         <Container>
           <Navbar.Brand className="fw-semibold" href="/">
             Unsent Voice Notes

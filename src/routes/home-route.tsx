@@ -55,12 +55,8 @@ export function HomeRoute() {
       <Card className="my-4">
         <Card.Body>
           <Card.Title className="text-center">
-            Your Unsent Voice Notes
+            A Transcribed Archive of Your Thoughts
           </Card.Title>
-          <Card.Text className="text-center">
-            Your voice notes are securely stored on your device and will never
-            be uploaded or shared with anyone.
-          </Card.Text>
           <div className="py-3">
             <VoiceNoteRecorderButton fn={(blob: Blob) => setBlob(blob)} />
           </div>
