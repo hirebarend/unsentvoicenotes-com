@@ -1,6 +1,5 @@
 import axios from "axios";
 import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
 import { ref, getDownloadURL, getStorage, uploadBytes } from "firebase/storage";
 import * as uuid from "uuid";
 
@@ -15,7 +14,10 @@ const firebaseApp = initializeApp({
 
 const firebaseStorage = getStorage(firebaseApp);
 
-export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
+export async function createVoiceNote(
+  sub: string,
+  arrayBuffer: ArrayBuffer
+): Promise<void> {
   const fileId: string = uuid.v4();
 
   const storageReference = ref(firebaseStorage, fileId);
@@ -29,17 +31,30 @@ export async function createVoiceNote(arrayBuffer: ArrayBuffer): Promise<void> {
   await axios.post(
     "https://func-unsentvoicenotes-prod-001.azurewebsites.net/api/voice-notes-post",
     {
+      // id: uuid.v4(),
+      // status: 'unprocessed',
+      // text: null,
+      // timestamp: new Date().getTime(),
+      // url,
+
       id: uuid.v4(),
-      text: null,
+      status: "processed",
+      text: "Todays was a good day, had a good breakfast. A bit stressed about my assigments but still very positive.",
       timestamp: new Date().getTime(),
       url,
+    },
+    {
+      params: {
+        sub,
+      },
     }
   );
 }
 
-export async function findAllVoiceNotes(): Promise<
+export async function findAllVoiceNotes(sub: string): Promise<
   Array<{
     id: string;
+    status: "unprocessed" | "processing" | "processed" | "optimized";
     text: string | null;
     timestamp: number;
     url: string;
@@ -48,12 +63,18 @@ export async function findAllVoiceNotes(): Promise<
   const response = await axios.get<
     Array<{
       id: string;
+      status: "unprocessed" | "processing" | "processed" | "optimized";
       text: string | null;
       timestamp: number;
       url: string;
     }>
   >(
-    "https://func-unsentvoicenotes-prod-001.azurewebsites.net/api/voice-notes-get"
+    "https://func-unsentvoicenotes-prod-001.azurewebsites.net/api/voice-notes-get",
+    {
+      params: {
+        sub,
+      },
+    }
   );
 
   return response.data;

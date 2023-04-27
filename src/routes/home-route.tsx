@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
 import moment from "moment";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
@@ -9,18 +10,18 @@ import {
   createVoiceNote,
   findAllVoiceNotes,
 } from "../core";
-import { useAuthentication } from "../custom-hooks";
 import { VoiceNoteRecorderButton } from "../components";
 
 export function HomeRoute() {
-  const authentication = useAuthentication();
+  const { isAuthenticated, isLoading, user } = useAuth0();
 
   const navigate = useNavigate();
 
   const result = useQuery({
+    enabled: isAuthenticated && user ? true : false,
     queryKey: ["voice-notes"],
     queryFn: async () => {
-      return await findAllVoiceNotes();
+      return await findAllVoiceNotes(user?.sub || "");
     },
   });
 
@@ -32,12 +33,18 @@ export function HomeRoute() {
     }
 
     convertBlobToArrayBuffer(blob)
-      .then((arrayBuffer: ArrayBuffer) => createVoiceNote(arrayBuffer))
+      .then((arrayBuffer: ArrayBuffer) =>
+        createVoiceNote(user?.sub || "", arrayBuffer)
+      )
       .then(() => result.refetch())
       .then(() => setBlob(null));
   }, [blob]);
 
-  if (!authentication.isAuthenticated) {
+  if (isLoading) {
+    return <></>;
+  }
+
+  if (!isAuthenticated) {
     navigate("/get-started");
 
     return <></>;

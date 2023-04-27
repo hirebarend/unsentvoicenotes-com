@@ -1,12 +1,16 @@
+import { useAuth0 } from "@auth0/auth0-react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { useNavigate } from "react-router-dom";
-import { useAuthentication } from "../custom-hooks";
 
 export function UnauthenticatedRoute() {
-  const authentication = useAuthentication();
+  const { isAuthenticated, loginWithPopup } = useAuth0();
 
   const navigate = useNavigate();
+
+  if (isAuthenticated) {
+    navigate("/");
+  }
 
   return (
     <>
@@ -25,9 +29,11 @@ export function UnauthenticatedRoute() {
       <Button
         className="fw-semibold text-white w-100"
         onClick={() => {
-          authentication.signIn();
-
-          navigate("/");
+          loginWithPopup({
+            authorizationParams: {
+              screen_hint: "signup",
+            },
+          });
         }}
         variant="primary"
       >
