@@ -31,17 +31,17 @@ export async function createVoiceNote(
   await axios.post(
     "https://func-unsentvoicenotes-prod-001.azurewebsites.net/api/voice-notes-post",
     {
-      // id: uuid.v4(),
-      // status: 'unprocessed',
-      // text: null,
-      // timestamp: new Date().getTime(),
-      // url,
-
       id: uuid.v4(),
-      status: "processed",
-      text: "Todays was a good day, had a good breakfast. A bit stressed about my assigments but still very positive.",
+      status: "unprocessed",
+      text: null,
       timestamp: new Date().getTime(),
       url,
+
+      // id: uuid.v4(),
+      // status: "processed",
+      // text: "Todays was a good day, had a good breakfast. A bit stressed about my assigments but still very positive.",
+      // timestamp: new Date().getTime(),
+      // url,
     },
     {
       params: {
