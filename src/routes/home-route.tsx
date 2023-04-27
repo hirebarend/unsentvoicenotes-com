@@ -70,7 +70,9 @@ export function HomeRoute() {
                         {moment(x.timestamp).format("dddd")} at{" "}
                         {moment(x.timestamp).format("HH:mm")}
                       </p>
-                      {x.text ? <p>{x.text}</p> : null}
+                      {x.text ? (
+                        <p style={{ textAlign: "justify" }}>{x.text}</p>
+                      ) : null}
                     </div>
                   </div>
                 </ListGroup.Item>

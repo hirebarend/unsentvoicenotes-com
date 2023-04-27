@@ -5,6 +5,8 @@ export class AudioRecorder {
 
   protected mediaStream: MediaStream | null = null;
 
+  protected wakeLock: any | null = null;
+
   constructor(protected cb: (blob: Blob) => void) {}
 
   public async requestAccess(): Promise<void> {
@@ -17,6 +19,12 @@ export class AudioRecorder {
   }
 
   public async start(): Promise<void> {
+    if ("wakeLock" in navigator) {
+      try {
+        this.wakeLock = await (navigator.wakeLock as any).request("screen");
+      } catch {}
+    }
+
     this.blobs = [];
 
     await this.requestAccess();
@@ -63,6 +71,12 @@ export class AudioRecorder {
   }
 
   public async stop(): Promise<void> {
+    if (this.wakeLock) {
+      await this.wakeLock.release();
+
+      this.wakeLock = null;
+    }
+
     if (this.mediaRecorder) {
       this.mediaRecorder.stop();
 
