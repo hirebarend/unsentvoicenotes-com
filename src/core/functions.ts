@@ -51,7 +51,7 @@ export async function findAllVoiceNotes(sub: string): Promise<
     id: string;
     message: string | null;
     status: "unprocessed" | "processing" | "processed" | "failed";
-    text: string | null;
+    text: Array<string>;
     timestamp: number;
     url: string;
   }>
@@ -62,7 +62,7 @@ export async function findAllVoiceNotes(sub: string): Promise<
       id: string;
       message: string | null;
       status: "unprocessed" | "processing" | "processed" | "failed";
-      text: string | null;
+      text: Array<string>;
       timestamp: number;
       url: string;
     }>
