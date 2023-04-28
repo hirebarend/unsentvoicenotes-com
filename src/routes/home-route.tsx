@@ -76,7 +76,7 @@ export function HomeRoute() {
           {result.data && result.data.length ? (
             <ListGroup as="ol" variant="flush">
               {result.data.map((x: any) => (
-                <ListGroup.Item as="li" className="px-0" key={x.timestamp}>
+                <ListGroup.Item as="li" className="px-0" key={x.id}>
                   <div>
                     <div className="fs-6">
                       <p
