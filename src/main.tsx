@@ -8,11 +8,12 @@ import "./index.scss";
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <QueryClientProvider client={new QueryClient()}>
     <Auth0Provider
-      domain="unsent-voice-notes.eu.auth0.com"
-      clientId="6X88wrUZPFHnNDoKdQmCdbXYV7Hw1uwM"
       authorizationParams={{
         redirect_uri: window.location.origin,
       }}
+      clientId="6X88wrUZPFHnNDoKdQmCdbXYV7Hw1uwM"
+      domain="unsent-voice-notes.eu.auth0.com"
+      useRefreshTokens={true}
     >
       <App />
     </Auth0Provider>
