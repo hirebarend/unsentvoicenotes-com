@@ -36,7 +36,7 @@ export function VoiceNoteRecorderButton(props: { fn: (blob: Blob) => void }) {
             setTimeout(() => {
               oscillatorNode.stop();
             }, 300);
-          }, 1000);
+          }, 500);
         }
       }}
       variant="outline-dark"
