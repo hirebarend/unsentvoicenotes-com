@@ -47,8 +47,10 @@ export async function createVoiceNote(
 
 export async function findAllVoiceNotes(sub: string): Promise<
   Array<{
+    duration: number | null;
     id: string;
-    status: "unprocessed" | "processing" | "processed" | "summarized";
+    message: string | null;
+    status: "unprocessed" | "processing" | "processed" | "failed";
     text: string | null;
     timestamp: number;
     url: string;
@@ -56,8 +58,10 @@ export async function findAllVoiceNotes(sub: string): Promise<
 > {
   const response = await axios.get<
     Array<{
+      duration: number | null;
       id: string;
-      status: "unprocessed" | "processing" | "processed" | "summarized";
+      message: string | null;
+      status: "unprocessed" | "processing" | "processed" | "failed";
       text: string | null;
       timestamp: number;
       url: string;

@@ -57,6 +57,19 @@ export function HomeRoute() {
           <Card.Title className="text-center">
             Archive of my Thoughts
           </Card.Title>
+          {result.data && result.data.length ? (
+            <div className="d-flex flex-row justify-content-center">
+              <div style={{ fontSize: "0.875rem" }}>
+                total of&nbsp;
+                <span className="fw-bold text-primary">
+                  {Math.floor(
+                    result.data.reduce((sum, x) => sum + (x.duration || 0), 0)
+                  )}
+                </span>
+                &nbsp;seconds
+              </div>
+            </div>
+          ) : null}
           <div className="py-3">
             <VoiceNoteRecorderButton fn={(blob: Blob) => setBlob(blob)} />
           </div>
@@ -67,7 +80,7 @@ export function HomeRoute() {
                   <div>
                     <div className="fs-6">
                       <p
-                        className="text-end text-muted"
+                        className="mb-1 text-end text-muted"
                         style={{ fontSize: "0.875rem" }}
                       >
                         {moment(x.timestamp).format("DD MMMM yyyy, HH:mm")}
@@ -76,13 +89,18 @@ export function HomeRoute() {
                         <p style={{ textAlign: "justify" }}>
                           We are processing your entry, please hold on a moment.
                           This may take a few minutes depending on the length of
-                          your recording. Thank you for using our app to capture
-                          your thoughts!
+                          your recording.
                         </p>
                       ) : null}
-                      {["processed", "summarized"].includes(x.status) &&
-                      x.text ? (
+                      {["processed"].includes(x.status) && x.text ? (
                         <p style={{ textAlign: "justify" }}>{x.text}</p>
+                      ) : null}
+                      {["failed"].includes(x.status) ? (
+                        <p style={{ textAlign: "justify" }}>
+                          We're sorry, but it seems like your recording was too
+                          short for us to transcribe. Please make sure that your
+                          recording is at least 10 seconds long and try again.
+                        </p>
                       ) : null}
                     </div>
                   </div>

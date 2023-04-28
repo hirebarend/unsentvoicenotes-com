@@ -27,7 +27,7 @@ export function UnauthenticatedRoute() {
       </Card>
 
       <Button
-        className="fw-semibold text-white w-100"
+        className="text-white w-100"
         onClick={() => {
           loginWithPopup({
             authorizationParams: {
@@ -35,7 +35,7 @@ export function UnauthenticatedRoute() {
             },
           });
         }}
-        variant="primary"
+        variant="dark"
       >
         Get Started
       </Button>

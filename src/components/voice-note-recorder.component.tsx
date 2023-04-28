@@ -1,4 +1,5 @@
 import { useState } from "react";
+import classNames from "classnames";
 import Button from "react-bootstrap/Button";
 import { BsRecordCircle, BsStopCircle } from "react-icons/bs";
 import { AudioRecorder } from "../core";
@@ -10,7 +11,10 @@ export function VoiceNoteRecorderButton(props: { fn: (blob: Blob) => void }) {
 
   return (
     <Button
-      className="w-100"
+      className={classNames("w-100", {
+        "bg-dark": isRecording,
+        "text-white": isRecording,
+      })}
       onClick={() => {
         if (isRecording) {
           audioRecorder.stop();
@@ -35,7 +39,7 @@ export function VoiceNoteRecorderButton(props: { fn: (blob: Blob) => void }) {
           }, 1000);
         }
       }}
-      variant="outline-primary"
+      variant="outline-dark"
     >
       {isRecording ? (
         <>
