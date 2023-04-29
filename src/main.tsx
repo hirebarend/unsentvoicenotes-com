@@ -11,6 +11,7 @@ ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
       authorizationParams={{
         redirect_uri: window.location.origin,
       }}
+      cacheLocation="localstorage"
       clientId="6X88wrUZPFHnNDoKdQmCdbXYV7Hw1uwM"
       domain="unsent-voice-notes.eu.auth0.com"
       useRefreshTokens={true}
