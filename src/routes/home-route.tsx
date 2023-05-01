@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { useAuth0 } from "@auth0/auth0-react";
 import moment from "moment";
+import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
+import { BsFiles, BsDownload, BsShare } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -92,7 +94,7 @@ export function HomeRoute() {
                           your recording.
                         </p>
                       ) : null}
-                      {["processed"].includes(x.status) && x.text ? (
+                      {["processed"].includes(x.status) ? (
                         <p style={{ textAlign: "justify" }}>{x.text[1]}</p>
                       ) : null}
                       {["failed"].includes(x.status) ? (
@@ -102,6 +104,34 @@ export function HomeRoute() {
                           recording is at least 10 seconds long and try again.
                         </p>
                       ) : null}
+                      <div className="d-flex justify-content-end">
+                        <div className="mx-1">
+                          <Button variant="light">
+                            <BsFiles />
+                          </Button>
+                        </div>
+                        <div className="mx-1">
+                          <Button variant="light">
+                            <BsDownload />
+                          </Button>
+                        </div>
+                        <div className="mx-1">
+                          <Button
+                            onClick={async () => {
+                              const data = {
+                                text: x.text[0],
+                              };
+
+                              if (navigator.canShare(data)) {
+                                await navigator.share(data);
+                              }
+                            }}
+                            variant="light"
+                          >
+                            <BsShare />
+                          </Button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </ListGroup.Item>
