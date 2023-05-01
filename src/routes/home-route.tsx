@@ -57,7 +57,7 @@ export function HomeRoute() {
       <Card className="my-4">
         <Card.Body>
           <Card.Title className="text-center">
-            Archive of my Thoughts
+            Archive of your thoughts
           </Card.Title>
           {result.data && result.data.length ? (
             <div className="d-flex flex-row justify-content-center">
@@ -106,13 +106,23 @@ export function HomeRoute() {
                       ) : null}
                       <div className="d-flex justify-content-end">
                         <div className="mx-1">
-                          <Button variant="light">
-                            <BsFiles />
+                          <Button
+                            onClick={async () => {
+                              await navigator.clipboard.writeText(x.text[0]);
+                            }}
+                            variant="light"
+                          >
+                            <BsFiles style={{ marginBottom: "3px" }} />
                           </Button>
                         </div>
                         <div className="mx-1">
-                          <Button variant="light">
-                            <BsDownload />
+                          <Button
+                            onClick={() => {
+                              window.open(x.url, "_blank");
+                            }}
+                            variant="light"
+                          >
+                            <BsDownload style={{ marginBottom: "3px" }} />
                           </Button>
                         </div>
                         <div className="mx-1">
@@ -128,7 +138,7 @@ export function HomeRoute() {
                             }}
                             variant="light"
                           >
-                            <BsShare />
+                            <BsShare style={{ marginBottom: "3px" }} />
                           </Button>
                         </div>
                       </div>
