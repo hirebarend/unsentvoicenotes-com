@@ -95,7 +95,9 @@ export function HomeRoute() {
                         </p>
                       ) : null}
                       {["processed"].includes(x.status) ? (
-                        <p style={{ textAlign: "justify" }}>{x.text[1]}</p>
+                        <p style={{ textAlign: "justify" }}>
+                          {x.text[x.text.length - 1]}
+                        </p>
                       ) : null}
                       {["failed"].includes(x.status) ? (
                         <p style={{ textAlign: "justify" }}>
