@@ -107,16 +107,18 @@ export function HomeRoute() {
                         </p>
                       ) : null}
                       <div className="d-flex justify-content-end">
-                        <div className="mx-1">
-                          <Button
-                            onClick={async () => {
-                              await navigator.clipboard.writeText(x.text[0]);
-                            }}
-                            variant="light"
-                          >
-                            <BsFiles style={{ marginBottom: "3px" }} />
-                          </Button>
-                        </div>
+                        {x.text ? (
+                          <div className="mx-1">
+                            <Button
+                              onClick={async () => {
+                                await navigator.clipboard.writeText(x.text[0]);
+                              }}
+                              variant="light"
+                            >
+                              <BsFiles style={{ marginBottom: "3px" }} />
+                            </Button>
+                          </div>
+                        ) : null}
                         <div className="mx-1">
                           <Button
                             onClick={() => {
@@ -127,22 +129,24 @@ export function HomeRoute() {
                             <BsDownload style={{ marginBottom: "3px" }} />
                           </Button>
                         </div>
-                        <div className="mx-1">
-                          <Button
-                            onClick={async () => {
-                              const data = {
-                                text: x.text[0],
-                              };
+                        {x.text ? (
+                          <div className="mx-1">
+                            <Button
+                              onClick={async () => {
+                                const data = {
+                                  text: x.text[0],
+                                };
 
-                              if (navigator.canShare(data)) {
-                                await navigator.share(data);
-                              }
-                            }}
-                            variant="light"
-                          >
-                            <BsShare style={{ marginBottom: "3px" }} />
-                          </Button>
-                        </div>
+                                if (navigator.canShare(data)) {
+                                  await navigator.share(data);
+                                }
+                              }}
+                              variant="light"
+                            >
+                              <BsShare style={{ marginBottom: "3px" }} />
+                            </Button>
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                   </div>
